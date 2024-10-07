@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 752883921169865122}
   - component: {fileID: 5150971969532559100}
   - component: {fileID: 2089066026693255312}
+  - component: {fileID: 8864315542977545956}
   m_Layer: 0
   m_Name: Bush_03
   m_TagString: Untagged
@@ -70,6 +71,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 426141c13b7fc834993b31b6044ba0f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &8864315542977545956
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752883921169499522}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.5347797, z: 1}
+  m_Center: {x: 0, y: 0.243346, z: 0}
 --- !u!1 &1474420149222256720
 GameObject:
   m_ObjectHideFlags: 0

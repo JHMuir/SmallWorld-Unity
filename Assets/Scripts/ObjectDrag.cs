@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-
-//using System.Numerics;
+// using System.Numerics;
 using UnityEngine;
 
 public class ObjectDrag : MonoBehaviour
@@ -20,5 +19,11 @@ public class ObjectDrag : MonoBehaviour
         Debug.Log("Dragging object: " + gameObject.name); // Log during dragging
         Vector3 pos = TileSystem.GetMouseWorldPosition() + offset;
         transform.position = TileSystem.currentTileSystem.SnapCoordinateToGrid(pos);
+    }
+
+    private void OnMouseUp()
+    {
+        Debug.Log("Mouse up on object: " + gameObject.name);
+        TileSystem.currentTileSystem.PlaceOnTile();
     }
 }

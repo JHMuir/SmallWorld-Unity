@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-
-//using System.Numerics;
+// using System.Numerics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -18,6 +17,7 @@ public class TileSystem : MonoBehaviour
     public GameObject prefab1; 
 
     private PlaceableObject objectToPlace;
+    private bool objectPlaced = false;
 
     #region Unity Methods
     private void Awake()
@@ -31,34 +31,19 @@ public class TileSystem : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.A))
         {
-            Debug.Log("A Pressed.");
-            InitializeWithObject(prefab1);
-        }
-        // else if(Input.GetKeyDown(KeyCode.B))
-        // {
-        //     InitializeWithObject(prefab2);
-        // }
-        if (!objectToPlace)
-        {
-            return;
-        }
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            if (CanBePlaced(objectToPlace))
+            if (objectToPlace && !objectPlaced)
             {
-                objectToPlace.Place();
-                Vector3Int start = gridLayout.WorldToCell(objectToPlace.GetStartPosition());
-                TakeArea(start, objectToPlace.Size);
+                Debug.Log(objectToPlace.name + " has not been placed, cannot spawn another.");
+                return;
             }
             else
             {
-                Destroy(objectToPlace.gameObject);
+                InitializeWithObject(prefab1);
+                objectPlaced = false;
             }
         }
-        else if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            Destroy(objectToPlace.gameObject);
-        }
+        
+        
     }
     #endregion
 
@@ -68,12 +53,12 @@ public class TileSystem : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out RaycastHit raycastHit))
         {
-            Debug.Log("Raycast hit at: " + raycastHit.point); // Log the hit point
+            // Debug.Log("Raycast hit at: " + raycastHit.point); // Log the hit point
             return raycastHit.point;
         }
         else
         {
-            Debug.Log("Raycast missed."); // Log when nothing is hit
+            // Debug.Log("Raycast missed."); // Log when nothing is hit
             return Vector3.zero;
         }
     }
@@ -99,6 +84,21 @@ public class TileSystem : MonoBehaviour
     #endregion 
     
     #region Plant Placement
+
+    public void PlaceOnTile()
+    {
+        if (CanBePlaced(objectToPlace))
+        {
+            objectToPlace.Place();
+            Vector3Int start = gridLayout.WorldToCell(objectToPlace.GetStartPosition());
+            TakeArea(start, objectToPlace.Size);
+            objectPlaced = true;
+        }
+        else
+        {
+            Destroy(objectToPlace.gameObject);
+        }
+    }
 
     public void InitializeWithObject(GameObject prefab)
     {
