@@ -6,9 +6,10 @@ using UnityEngine;
 
 public class PlaceableObject : MonoBehaviour
 {
-    public bool Placed{ get; private set; }
+    // public bool Placed{ get; private set; }
     public Vector3Int Size { get; private set; }
     private Vector3[] Vertices;
+    private bool planted = false;
 
     private void GetColliderVertexPositionsLocal()
     {
@@ -52,8 +53,17 @@ public class PlaceableObject : MonoBehaviour
     {
         ObjectDrag drag = gameObject.GetComponent<ObjectDrag>();
         Destroy(drag);
+        planted = true;
 
         //Create placement event, if applicable
+    }
+
+    private void OnMouseDown()
+    {
+        if(planted)
+        {
+            Debug.Log("Clicked on planted plant");
+        }
     }
     
 }
