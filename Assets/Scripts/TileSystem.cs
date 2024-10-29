@@ -4,10 +4,12 @@ using Unity.VisualScripting;
 // using System.Numerics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class TileSystem : MonoBehaviour
 {
     public static TileSystem currentTileSystem;
+    public Button addPlantButton; 
 
     public GridLayout gridLayout; 
     public Grid grid; 
@@ -24,6 +26,7 @@ public class TileSystem : MonoBehaviour
     {
         currentTileSystem = this;
         grid = gridLayout.gameObject.GetComponent<Grid>();
+        addPlantButton.onClick.AddListener(OnButtonClick);
 
     }
 
@@ -84,6 +87,21 @@ public class TileSystem : MonoBehaviour
     #endregion 
     
     #region Plant Placement
+
+    private void OnButtonClick()
+    {
+        Debug.Log("Add Button Clicked!");
+        if (objectToPlace && !objectPlaced)
+            {
+                Debug.Log(objectToPlace.name + " has not been placed, cannot spawn another.");
+                return;
+            }
+            else
+            {
+                InitializeWithObject(prefab1);
+                objectPlaced = false;
+            }
+    }
 
     public void PlaceOnTile()
     {
