@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlaceableObject : MonoBehaviour
 {
@@ -10,6 +12,10 @@ public class PlaceableObject : MonoBehaviour
     public Vector3Int Size { get; private set; }
     private Vector3[] Vertices;
     private bool planted = false;
+
+    private GameObject popupPrefab;
+    private GameObject popupInstance;
+    public string objectInfo = "<Enter Information Here";
 
     private void GetColliderVertexPositionsLocal()
     {
@@ -46,6 +52,7 @@ public class PlaceableObject : MonoBehaviour
     {
         GetColliderVertexPositionsLocal();
         CalculateSizeInCells();
+        popupPrefab = Resources.Load<GameObject>("Window");
 
     }
 
@@ -62,7 +69,22 @@ public class PlaceableObject : MonoBehaviour
     {
         if(planted)
         {
-            Debug.Log("Clicked on planted plant");
+            ShowPopup();
+        }
+    }
+
+    private void ShowPopup()
+    {
+        if (popupPrefab != null && popupInstance == null)
+        {
+            popupInstance = Instantiate(popupPrefab, transform.position, Quaternion.identity);
+            popupInstance.transform.SetParent(GameObject.Find("Canvas").transform, false);
+
+            Text body = popupInstance.GetComponent<Text>();
+            if(body != null)
+            {
+                body.text = objectInfo;
+            }
         }
     }
     

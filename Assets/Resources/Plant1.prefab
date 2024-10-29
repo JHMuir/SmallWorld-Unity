@@ -71,6 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 426141c13b7fc834993b31b6044ba0f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectInfo: <Enter Information Here
 --- !u!65 &8864315542977545956
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -326,6 +327,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 426141c13b7fc834993b31b6044ba0f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectInfo: Plant Info Here!
 --- !u!54 &2907857898009412851
 Rigidbody:
   m_ObjectHideFlags: 0
