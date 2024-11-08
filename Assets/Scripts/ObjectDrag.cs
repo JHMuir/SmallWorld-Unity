@@ -10,20 +10,17 @@ public class ObjectDrag : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("Mouse down on object: " + gameObject.name); // Log when the object is clicked
         offset = transform.position - TileSystem.GetMouseWorldPosition();
     }
 
     private void OnMouseDrag()
     {
-        Debug.Log("Dragging object: " + gameObject.name); // Log during dragging
         Vector3 pos = TileSystem.GetMouseWorldPosition() + offset;
         transform.position = TileSystem.currentTileSystem.SnapCoordinateToGrid(pos);
     }
 
     private void OnMouseUp()
     {
-        Debug.Log("Mouse up on object: " + gameObject.name);
         TileSystem.currentTileSystem.PlaceOnTile();
     }
 }

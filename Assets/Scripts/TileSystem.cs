@@ -90,17 +90,24 @@ public class TileSystem : MonoBehaviour
 
     private void OnButtonClick()
     {
-        Debug.Log("Add Button Clicked!");
-        if (objectToPlace && !objectPlaced)
-            {
-                Debug.Log(objectToPlace.name + " has not been placed, cannot spawn another.");
-                return;
-            }
-            else
-            {
-                InitializeWithObject(prefab1);
-                objectPlaced = false;
-            }
+        if(!PlantManager.Instance.IsPlantDataEmpty())
+        {
+            Debug.Log("Add Button Clicked!");
+            if (objectToPlace && !objectPlaced)
+                {
+                    Debug.Log(objectToPlace.name + " has not been placed, cannot spawn another.");
+                    return;
+                }
+                else
+                {
+                    InitializeWithObject(prefab1);
+                    objectPlaced = false;
+                }
+        }
+        else
+        {
+            Debug.Log("Plants can no longer be added");
+        }
     }
 
     public void PlaceOnTile()
@@ -121,7 +128,6 @@ public class TileSystem : MonoBehaviour
     public void InitializeWithObject(GameObject prefab)
     {
         Vector3 position = SnapCoordinateToGrid(Vector3.zero);
-
         GameObject obj = Instantiate(prefab, position, Quaternion.identity);
         objectToPlace = obj.GetComponent<PlaceableObject>();
         obj.AddComponent<ObjectDrag>();

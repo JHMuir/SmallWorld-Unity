@@ -3,10 +3,16 @@ using Firebase.Database;
 using Firebase.Analytics;
 using Firebase.Extensions;
 using UnityEngine;
+using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class FirebaseManager : MonoBehaviour
 {
     public static FirebaseManager Instance { get; private set; }
+    
+    [System.Serializable] public class DataLoadedEvent : UnityEvent<List<PlantData>> { }
+    public DataLoadedEvent onDataLoaded;
+
     DatabaseReference database;
 
     private void Awake()
@@ -42,7 +48,7 @@ public class FirebaseManager : MonoBehaviour
         Debug.Log("Firebase Initialization Complete.");
     }
 
-    private void RetrieveDataFromFirebase()
+    public void RetrieveDataFromFirebase()
     {
         // Path to the data in the database
         DatabaseReference dataRef = database.Child("path/to/data");
@@ -62,6 +68,22 @@ public class FirebaseManager : MonoBehaviour
                 Debug.Log("Data retrieved: " + snapshot.GetRawJsonValue());
             }
         });
+    }
+
+    public void RetrievePlantData()
+    {
+         // Simulate data loading
+        List<PlantData> plantList = new List<PlantData>
+        {
+            new PlantData { plantName = "Rose", nativeHabitat = "Gardens", species = "Rosa", description = "A beautiful flowering plant." },
+            new PlantData { plantName = "Cactus", nativeHabitat = "Deserts", species = "Cactaceae", description = "A succulent plant." }
+        };
+
+        // Broadcast the event with the loaded data
+        if (onDataLoaded != null)
+        {
+            onDataLoaded.Invoke(plantList);
+        }
     }
 
 }
