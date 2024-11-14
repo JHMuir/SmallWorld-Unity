@@ -2,18 +2,25 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Analytics;
 using Firebase.Extensions;
+using Firebase.Storage;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using System.Collections;
+using System.Text;
+using System.Threading.Tasks;
 
 public class FirebaseManager : MonoBehaviour
 {
     public static FirebaseManager Instance { get; private set; }
+
+    FirebaseStorage storage;
+    StorageReference storageRef;
     
     [System.Serializable] public class DataLoadedEvent : UnityEvent<List<PlantData>> { }
     public DataLoadedEvent onDataLoaded;
 
-    DatabaseReference database;
+    DatabaseReference databaseRef;
 
     private void Awake()
     {
@@ -26,64 +33,109 @@ public class FirebaseManager : MonoBehaviour
             Instance = this;
         }
         DontDestroyOnLoad(gameObject);
+        InitializeFirebase();
     }
 
-    private void Start()
+    private void InitializeFirebase()
     {
-        Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
-            var dependencyStatus = task.Result;
-            if (dependencyStatus == Firebase.DependencyStatus.Available) {
-                // Create and hold a reference to your FirebaseApp,
-                // where app is a Firebase.FirebaseApp property of your application class.
-                FirebaseApp app = Firebase.FirebaseApp.DefaultInstance;
-                database = FirebaseDatabase.DefaultInstance.RootReference;
-
-                // Set a flag here to indicate whether Firebase is ready to use by your app.
-            } else {
-                UnityEngine.Debug.LogError(System.String.Format(
-                "ERROR: Could not resolve all Firebase dependencies: {0}", dependencyStatus));
-                // Firebase Unity SDK is not safe to use here.
-            }
-        });
+        InitializeStorage();
+        InitializeRealtime();
         Debug.Log("Firebase Initialization Complete.");
     }
 
-    public void RetrieveDataFromFirebase()
+    private void InitializeStorage()
     {
+        storage = FirebaseStorage.DefaultInstance;
+        storageRef = storage.GetReferenceFromUrl("gs://smallworld-b093d.appspot.com/plant_data/plants.json"); 
+        Debug.Log("Firebase Storage Initalized Successfully");
+    }
+
+    public void RetrievePlantDataFromStorage()
+    {
+        storageRef.GetBytesAsync(long.MaxValue).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                Debug.LogError("ERROR: Firebase Storage Data Retrieval Unsuccessful: " + task.Exception);
+                return;
+            }
+            else
+            {
+                Debug.Log("Firebase Storage Data Successfully Retrieved");
+                byte[] fileContents = task.Result;
+                string jsonText = Encoding.UTF8.GetString(fileContents);
+
+                List<PlantData> plantList = JsonUtility.FromJson<PlantDataList>(jsonText).plants;
+
+                Debug.Log("FROM FIREBASE: " + PlantManager.Instance.OutputPlantNames(plantList));
+
+                onDataLoaded?.Invoke(plantList);
+            }
+        });
+    }
+
+    private void InitializeRealtime()
+    {
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => 
+        {
+            if(task.IsCanceled)
+            {
+                Debug.LogError("Firebase Realtime Initialization Canceled.");
+                return;
+            }
+            if (task.IsFaulted)
+            {
+                Debug.LogError("ERROR: Firebase Realtime Initialization Faulted: " + task.Exception);
+                return;
+            }
+
+            var dependencyStatus = task.Result;
+            if (dependencyStatus == DependencyStatus.Available) 
+            {
+                FirebaseApp app = FirebaseApp.DefaultInstance;
+                databaseRef = FirebaseDatabase.DefaultInstance.RootReference;
+                Debug.Log("Firebase Realtime Initialization Successful.");
+
+                
+            } 
+            else 
+            {
+                Debug.LogError($"ERROR: Firebas Dependency Issue: {dependencyStatus}");
+            }
+        });
+    }
+
+    public void RetrieveDataFromRealtime()
+    {
+        if (databaseRef == null)
+        {
+            Debug.LogError("Firebase Realtime Database Reference is Null. Ensure Firebase Realtime is Initialized.");
+            return;
+        }
         // Path to the data in the database
-        DatabaseReference dataRef = database.Child("path/to/data");
+        DatabaseReference dataRef = databaseRef.Child("images");
 
         // Listen for the value once
         dataRef.GetValueAsync().ContinueWithOnMainThread(task =>
         {
+            if (task.IsCanceled)
+            {
+                Debug.LogError("Firebase Realtime Data Retrieval Canceled.");
+                return;
+            }
             if (task.IsFaulted)
             {
-                // Handle any errors here
-                Debug.LogError("Failed to retrieve data.");
+                Debug.LogError("ERROR: Firebase Realtime Data Retreival Faulted: " + task.Exception);
+                return;
             }
-            else if (task.IsCompleted)
+
+            if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                // Access the data in the snapshot
-                Debug.Log("Data retrieved: " + snapshot.GetRawJsonValue());
+                Debug.Log("Firebase Realtime Data Retrieved Successfully: " + snapshot.GetRawJsonValue());
+
+                // Parse data 
             }
         });
     }
-
-    public void RetrievePlantData()
-    {
-         // Simulate data loading
-        List<PlantData> plantList = new List<PlantData>
-        {
-            new PlantData { plantName = "Rose", nativeHabitat = "Gardens", species = "Rosa", description = "A beautiful flowering plant." },
-            new PlantData { plantName = "Cactus", nativeHabitat = "Deserts", species = "Cactaceae", description = "A succulent plant." }
-        };
-
-        // Broadcast the event with the loaded data
-        if (onDataLoaded != null)
-        {
-            onDataLoaded.Invoke(plantList);
-        }
-    }
-
 }

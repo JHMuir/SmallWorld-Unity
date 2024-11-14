@@ -22,35 +22,18 @@ public class TileSystem : MonoBehaviour
     private bool objectPlaced = false;
 
     #region Unity Methods
+
     private void Awake()
     {
         currentTileSystem = this;
         grid = gridLayout.gameObject.GetComponent<Grid>();
         addPlantButton.onClick.AddListener(OnButtonClick);
-
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            if (objectToPlace && !objectPlaced)
-            {
-                Debug.Log(objectToPlace.name + " has not been placed, cannot spawn another.");
-                return;
-            }
-            else
-            {
-                InitializeWithObject(prefab1);
-                objectPlaced = false;
-            }
-        }
-        
-        
-    }
     #endregion
 
-    #region Utils
+    #region TileMap Utils
+
     public static Vector3 GetMouseWorldPosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -65,12 +48,14 @@ public class TileSystem : MonoBehaviour
             return Vector3.zero;
         }
     }
+
     public Vector3 SnapCoordinateToGrid(Vector3 position)
     {
         Vector3Int cellPos = gridLayout.WorldToCell(position);
         position = grid.GetCellCenterWorld(cellPos);
         return position;
     }
+
     private static TileBase[] GetTilesBlock(BoundsInt area, Tilemap tilemap)
     {
         TileBase[] array = new TileBase[area.size.x * area.size.y * area.size.z];
@@ -84,6 +69,7 @@ public class TileSystem : MonoBehaviour
         }
         return array;
     }
+    
     #endregion 
     
     #region Plant Placement
@@ -92,7 +78,7 @@ public class TileSystem : MonoBehaviour
     {
         if(!PlantManager.Instance.IsPlantDataEmpty())
         {
-            Debug.Log("Add Button Clicked!");
+            // Debug.Log("Add Button Clicked!");
             if (objectToPlace && !objectPlaced)
                 {
                     Debug.Log(objectToPlace.name + " has not been placed, cannot spawn another.");
@@ -131,7 +117,7 @@ public class TileSystem : MonoBehaviour
         GameObject obj = Instantiate(prefab, position, Quaternion.identity);
         objectToPlace = obj.GetComponent<PlaceableObject>();
         obj.AddComponent<ObjectDrag>();
-        Debug.Log("Added ObjectDrag component to: " + obj.name);
+        // Debug.Log("Added ObjectDrag component to: " + obj.name);
     }
 
     private bool CanBePlaced(PlaceableObject placeableObject)

@@ -13,8 +13,7 @@ public class PlaceableObject : MonoBehaviour
 
     public PlantClickEvent onPlantClicked; 
     private PlantData plantData;
-
-    // public bool Placed{ get; private set; }
+    
     public Vector3Int Size { get; private set; }
     private Vector3[] Vertices;
     private bool planted = false;
@@ -71,7 +70,7 @@ public class PlaceableObject : MonoBehaviour
     {
         if(planted && onPlantClicked != null)
         {
-            Debug.Log("Plant Clicked!!!");
+            // Debug.Log("Plant Clicked!!!");
             onPlantClicked.Invoke(plantData);
         }
     }

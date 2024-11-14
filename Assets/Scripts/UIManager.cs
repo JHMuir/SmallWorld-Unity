@@ -31,7 +31,6 @@ public class UIManager : MonoBehaviour
         currentPopup = Instantiate(popupPrefab, transform);
         currentPopup.transform.SetParent(GameObject.Find("Canvas").transform, false);
         TextMeshProUGUI[] plantTexts = currentPopup.GetComponentsInChildren<TextMeshProUGUI>();
-        Debug.Log(plantTexts);
         foreach(TextMeshProUGUI plantText in plantTexts)
         {
             if(plantText.gameObject.name == "PlantName")

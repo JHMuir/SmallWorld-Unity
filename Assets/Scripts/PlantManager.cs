@@ -27,20 +27,13 @@ public class PlantManager : MonoBehaviour
     private void Start()
     {
         FirebaseManager.Instance.onDataLoaded.AddListener(LoadPlantData);
-        FirebaseManager.Instance.RetrievePlantData();
+        FirebaseManager.Instance.RetrievePlantDataFromStorage();
     }
 
     private void LoadPlantData(List<PlantData> plantDatabase)
     {
-        foreach(PlantData plantData in plantDatabase)
-        {
-            Debug.Log(plantData.plantName);
-            Debug.Log(plantData.nativeHabitat);
-            Debug.Log(plantData.species);
-            Debug.Log(plantData.description);
-
-        }
         plants = plantDatabase;
+        Debug.Log("FROM LOCAL: " + OutputPlantNames(plants));
     }
 
     public bool IsPlantDataEmpty()
@@ -68,5 +61,16 @@ public class PlantManager : MonoBehaviour
             Debug.Log("Plants are empty.");
             return null;
         }
+    }
+
+    public string OutputPlantNames(List<PlantData> plantList)
+    {
+        List<string> plantNames = new List<string>();
+        foreach (PlantData plant in plantList)
+        {
+            plantNames.Add(plant.plantName);
+        }
+        string plantNamesString = string.Join(", ", plantNames);
+        return plantNamesString;
     }
 }
