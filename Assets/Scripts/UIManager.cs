@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,23 +24,24 @@ public class UIManager : MonoBehaviour
     }
     public void ShowPopup(PlantData data)
     {
-        Debug.Log("HELLLOOOO PLEASE WORK");
         if(currentPopup != null)
         {
             Destroy(currentPopup);
         }
-
-        currentPopup = Instantiate(popupPrefab, transform);//.position, Quaternion.identity);
+        currentPopup = Instantiate(popupPrefab, transform);
         currentPopup.transform.SetParent(GameObject.Find("Canvas").transform, false);
-        // Text plantNameText = currentPopup.transform.Find("PlantNameText").GetComponent<Text>();
-        // Text habitatText = currentPopup.transform.Find("HabitatText").GetComponent<Text>();
-        // Text speciesText = currentPopup.transform.Find("SpeciesText").GetComponent<Text>();
-        // Text descriptionText = currentPopup.transform.Find("DescriptionText").GetComponent<Text>();
-
-        // plantNameText.text = data.plantName;
-        // habitatText.text = data.nativeHabitat;
-        // speciesText.text = data.species;
-        // descriptionText.text = data.description;
-
+        TextMeshProUGUI[] plantTexts = currentPopup.GetComponentsInChildren<TextMeshProUGUI>();
+        Debug.Log(plantTexts);
+        foreach(TextMeshProUGUI plantText in plantTexts)
+        {
+            if(plantText.gameObject.name == "PlantName")
+            {
+                plantText.text = data.plantName;
+            }
+            else if(plantText.gameObject.name == "Body")
+            {
+                plantText.text = $"Native Habitat: {data.nativeHabitat}\nSpecies: {data.species}\nDescription:{data.description}";
+            }
+        }
     }
 }
