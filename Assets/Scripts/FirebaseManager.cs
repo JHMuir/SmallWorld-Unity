@@ -67,7 +67,7 @@ public class FirebaseManager : MonoBehaviour
 
                 List<PlantData> plantList = JsonUtility.FromJson<PlantDataList>(jsonText).plants;
 
-                Debug.Log("FROM FIREBASE: " + PlantManager.Instance.OutputPlantNames(plantList));
+                // Debug.Log("FROM FIREBASE: " + PlantManager.Instance.OutputPlantNames(plantList));
 
                 onDataLoaded?.Invoke(plantList);
             }

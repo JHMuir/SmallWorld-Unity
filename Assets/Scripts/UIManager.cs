@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set;}
+
+    public TMP_Dropdown plantsDropdown; 
     public GameObject popupPrefab; 
     private GameObject currentPopup;
 
@@ -22,7 +24,27 @@ public class UIManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
     }
-    public void ShowPopup(PlantData data)
+
+    private void Start()
+    {
+        PlantManager.Instance.onPlantsReady.AddListener(AddDropdownOptions);
+    }
+
+    void AddDropdownOptions(List<PlantData> plantList)
+    {
+        Debug.Log("Dropdown Additions Executed with " + plantList.Count + " plants");
+        List<string> plantNames = PlantManager.Instance.GetPlantNames(plantList);
+        // foreach(PlantData plant in plantList)
+        // {
+        //     Debug.Log("FROM DROPDOWN: " + plant.plantName);
+        //     plantsDropdown.options.Add(new TMP_Dropdown.OptionData(plant.plantName)); 
+        //     plantsDropdown.RefreshShownValue();    
+        // }
+        plantsDropdown.AddOptions(plantNames);
+        plantsDropdown.RefreshShownValue();
+    }
+
+    public void ShowPlantPopup(PlantData data)
     {
         if(currentPopup != null)
         {

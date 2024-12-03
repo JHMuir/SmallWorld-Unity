@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -57,7 +56,7 @@ public class PlaceableObject : MonoBehaviour
 
     public virtual void Place()
     {
-        onPlantClicked.AddListener(UIManager.Instance.ShowPopup);
+        onPlantClicked.AddListener(UIManager.Instance.ShowPlantPopup);
         plantData = PlantManager.Instance.PassPlantData();
         ObjectDrag drag = gameObject.GetComponent<ObjectDrag>();
         Destroy(drag);

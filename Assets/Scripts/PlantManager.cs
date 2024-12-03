@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEngine.Events;
 using UnityEngine;
 
 public class PlantManager : MonoBehaviour
@@ -10,6 +11,9 @@ public class PlantManager : MonoBehaviour
 
     private List<PlantData> plants = new List<PlantData>();
     private int plantIndex = 0;
+
+    [System.Serializable] public class PlantsReadyEvent : UnityEvent<List<PlantData>> { }
+    public PlantsReadyEvent onPlantsReady;
 
     private void Awake()
     {
@@ -33,7 +37,8 @@ public class PlantManager : MonoBehaviour
     private void LoadPlantData(List<PlantData> plantDatabase)
     {
         plants = plantDatabase;
-        Debug.Log("FROM LOCAL: " + OutputPlantNames(plants));
+        onPlantsReady?.Invoke(plants);
+        // Debug.Log("FROM LOCAL NAMES: " + OutputPlantNames(plants) + ", COUNT: " + plants.Count);
     }
 
     public bool IsPlantDataEmpty()
@@ -63,14 +68,25 @@ public class PlantManager : MonoBehaviour
         }
     }
 
+    public List<PlantData> PassPlantListData()
+    {
+        Debug.Log("PASS LIST EXECUTED");
+        return plants;
+    }
+
     public string OutputPlantNames(List<PlantData> plantList)
+    {
+        List<string> plantNames = GetPlantNames(plantList);
+        string plantNamesString = string.Join(", ", plantNames);
+        return plantNamesString;
+    }
+    public List<string> GetPlantNames(List<PlantData> plantList)
     {
         List<string> plantNames = new List<string>();
         foreach (PlantData plant in plantList)
         {
             plantNames.Add(plant.plantName);
         }
-        string plantNamesString = string.Join(", ", plantNames);
-        return plantNamesString;
+        return plantNames;
     }
 }
