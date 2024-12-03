@@ -32,14 +32,8 @@ public class UIManager : MonoBehaviour
 
     void AddDropdownOptions(List<PlantData> plantList)
     {
-        Debug.Log("Dropdown Additions Executed with " + plantList.Count + " plants");
+        // Debug.Log("Dropdown Additions Executed with " + plantList.Count + " plants");
         List<string> plantNames = PlantManager.Instance.GetPlantNames(plantList);
-        // foreach(PlantData plant in plantList)
-        // {
-        //     Debug.Log("FROM DROPDOWN: " + plant.plantName);
-        //     plantsDropdown.options.Add(new TMP_Dropdown.OptionData(plant.plantName)); 
-        //     plantsDropdown.RefreshShownValue();    
-        // }
         plantsDropdown.AddOptions(plantNames);
         plantsDropdown.RefreshShownValue();
     }

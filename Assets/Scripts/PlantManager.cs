@@ -68,12 +68,6 @@ public class PlantManager : MonoBehaviour
         }
     }
 
-    public List<PlantData> PassPlantListData()
-    {
-        Debug.Log("PASS LIST EXECUTED");
-        return plants;
-    }
-
     public string OutputPlantNames(List<PlantData> plantList)
     {
         List<string> plantNames = GetPlantNames(plantList);
