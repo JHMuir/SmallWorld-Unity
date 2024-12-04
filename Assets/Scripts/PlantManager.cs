@@ -53,13 +53,20 @@ public class PlantManager : MonoBehaviour
         }
     }
 
-    public PlantData PassPlantData()
+    public PlantData PassPlantData(string spawnName)
     {
         if(!IsPlantDataEmpty())
         {
-            PlantData plant = plants[plantIndex];
-            plantIndex++;
-            return plant;
+            foreach(PlantData plant in plants)
+            {
+                if (plant.plantName == spawnName)
+                {
+                    plantIndex++;
+                    return plant;
+                }
+            }
+            Debug.Log("No plant exists with name " + spawnName);
+            return null;
         }
         else
         {
@@ -74,6 +81,7 @@ public class PlantManager : MonoBehaviour
         string plantNamesString = string.Join(", ", plantNames);
         return plantNamesString;
     }
+
     public List<string> GetPlantNames(List<PlantData> plantList)
     {
         List<string> plantNames = new List<string>();

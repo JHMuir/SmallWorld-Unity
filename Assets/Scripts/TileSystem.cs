@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class TileSystem : MonoBehaviour
 {
     public static TileSystem currentTileSystem;
-    public Button addPlantButton; 
 
     public GridLayout gridLayout; 
     public Grid grid; 
@@ -27,7 +26,6 @@ public class TileSystem : MonoBehaviour
     {
         currentTileSystem = this;
         grid = gridLayout.gameObject.GetComponent<Grid>();
-        addPlantButton.onClick.AddListener(OnButtonClick);
     }
 
     #endregion
@@ -74,7 +72,7 @@ public class TileSystem : MonoBehaviour
     
     #region Plant Placement
 
-    private void OnButtonClick()
+    public void SpawnPlant()
     {
         if(!PlantManager.Instance.IsPlantDataEmpty())
         {

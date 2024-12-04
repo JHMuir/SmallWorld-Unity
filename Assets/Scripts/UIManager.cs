@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set;}
 
-    public TMP_Dropdown plantsDropdown; 
+    public TMP_Dropdown dropdown; 
     public GameObject popupPrefab; 
     private GameObject currentPopup;
 
@@ -34,8 +34,14 @@ public class UIManager : MonoBehaviour
     {
         // Debug.Log("Dropdown Additions Executed with " + plantList.Count + " plants");
         List<string> plantNames = PlantManager.Instance.GetPlantNames(plantList);
-        plantsDropdown.AddOptions(plantNames);
-        plantsDropdown.RefreshShownValue();
+        dropdown.AddOptions(plantNames);
+        dropdown.RefreshShownValue();
+    }
+
+    public string GetDropdownOptionValue()
+    {
+        string name = dropdown.options[dropdown.value].text;
+        return name;
     }
 
     public void ShowPlantPopup(PlantData data)

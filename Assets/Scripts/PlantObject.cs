@@ -57,7 +57,7 @@ public class PlaceableObject : MonoBehaviour
     public virtual void Place()
     {
         onPlantClicked.AddListener(UIManager.Instance.ShowPlantPopup);
-        plantData = PlantManager.Instance.PassPlantData();
+        plantData = PlantManager.Instance.PassPlantData(UIManager.Instance.GetDropdownOptionValue());
         ObjectDrag drag = gameObject.GetComponent<ObjectDrag>();
         Destroy(drag);
         planted = true;
