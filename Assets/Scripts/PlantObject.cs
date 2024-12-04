@@ -61,6 +61,7 @@ public class PlaceableObject : MonoBehaviour
         ObjectDrag drag = gameObject.GetComponent<ObjectDrag>();
         Destroy(drag);
         planted = true;
+        UIManager.Instance.RemoveDropdownOptionValue(plantData.plantName);
 
         //Create placement event, if applicable
     }

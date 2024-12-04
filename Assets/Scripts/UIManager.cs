@@ -44,6 +44,23 @@ public class UIManager : MonoBehaviour
         return name;
     }
 
+    public void RemoveDropdownOptionValue(string optionName)
+    {
+        for(int i = 0; i < dropdown.options.Count; i++)
+        {
+            if(dropdown.options[i].text == optionName)
+            {
+                dropdown.options.RemoveAt(i);
+                if(dropdown.value == i)
+                {
+                    dropdown.value = -1;
+                }
+                dropdown.RefreshShownValue();
+                break;
+            }
+        }
+    }
+
     public void ShowPlantPopup(PlantData data)
     {
         if(currentPopup != null)
